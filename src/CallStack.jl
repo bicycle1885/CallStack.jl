@@ -8,7 +8,7 @@ mutable struct CallStackState
     output::IO
     serial::Int
     depth::Int
-    CallStackState() = new(stderr, 0, 0)
+    CallStackState(output::IO) = new(output, 0, 0)
 end
 
 const INDENT = "  "
@@ -39,11 +39,19 @@ function Cassette.posthook(ctx::CallStackContext, f, args...)
     state.depth -= 1
 end
 
-macro callstack(fcall)
+function gencallstack(fcall; output = stderr)
     quote
-        state = CallStackState()
+        state = CallStackState($(esc(output)))
         Cassette.overdub(CallStackContext(metadata = state), () -> $(esc(fcall)))
     end
+end
+
+macro callstack(fcall)
+    gencallstack(fcall)
+end
+
+macro callstack(output, fcall)
+    gencallstack(fcall, output = output)
 end
 
 end # module
