@@ -1,0 +1,4 @@
+name = "CallStack"
+uuid = "3367fe6c-2f4c-11e9-1f7e-c1084b9d8eae"
+authors = ["Kenta Sato <bicycle1885@gmail.com>"]
+version = "0.1.0"
